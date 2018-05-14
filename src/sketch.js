@@ -29,7 +29,8 @@ const sketch = (p5) => {
 
   // runs once to set up the canvas
   p.setup = () => {
-    p.createCanvas(lineSize * squareSize + 1, nbLines * squareSize + 1);
+    p.createCanvas(lineSize * squareSize, nbLines * squareSize);
+    p.noStroke();
   };
 
   // runs at every frame
