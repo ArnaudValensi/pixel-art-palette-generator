@@ -1,5 +1,5 @@
-function createColorString(h, b, s) {
-  return `hsb(${h}, ${b}%, ${s}%)`;
+function createColorString(h, s, b) {
+  return `hsb(${h}, ${s}%, ${b}%)`;
 }
 
 function computeStartValue(steps, middleValue) {
@@ -17,6 +17,8 @@ export default class Palette {
     this.hSteps = [20, 20, 20, 20, 20, 20, 20, 20, 20];
     this.sSteps = [20, 20, 20, 10, 5, -15, -15, -15, -15];
     this.bSteps = [15, 15, 15, 15, 10, 10, 10, 5, 5];
+    this.attenuationSSteps = [15, 15, 25, 35, 35, 35, 25];
+    this.attenuationBSteps = [10, 10, 10, 10, 5, 3, 0];
     this.rampStep = 45;
   }
 
@@ -36,18 +38,28 @@ export default class Palette {
     let h = computeStartValue(this.hSteps, hue);
     let b = 0;
     let s = 0;
-    const line = [];
+    let line = [];
 
     for (let i = 0; i < 9; i++) {
       h = (h + this.hSteps[i]) % 360;
-      b += this.sSteps[i];
-      s += this.bSteps[i];
+      s += this.sSteps[i];
+      b += this.bSteps[i];
 
-      const color = createColorString(h, b, s);
-
-      line.push(color);
+      line.push({ h, s, b });
     }
 
-    return line;
+    const reverseLine = line.slice(1, -1).reverse();
+    const desaturedLine = reverseLine.map(({ h, b, s }, index) => {
+      let saturation = s - this.attenuationSSteps[index];
+
+      if (saturation < 0) {
+        saturation = 0;
+      }
+
+      return { h, s: saturation, b: b - this.attenuationBSteps[index] };
+    });
+    line = line.concat(desaturedLine);
+
+    return line.map(color => createColorString(color.h, color.s, color.b));
   }
 }

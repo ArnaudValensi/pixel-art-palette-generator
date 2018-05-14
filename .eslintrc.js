@@ -11,6 +11,7 @@ module.exports = {
   rules: {
     'no-new': 'off',
     'no-mixed-operators': 'off',
-    'no-plusplus': 'off'
+    'no-plusplus': 'off',
+    'no-shadow': 'off',
   },
 };

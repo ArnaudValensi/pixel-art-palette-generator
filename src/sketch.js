@@ -5,7 +5,7 @@ const P5 = p5;
 // sketch starting point must be a function
 const sketch = (p5) => {
   const p = p5;
-  const lineSize = 9;
+  const lineSize = 9 + 7;
   const nbLines = 8;
   const squareSize = 64;
   const palette = new Palette();
@@ -16,13 +16,13 @@ const sketch = (p5) => {
   }
 
   function drawLine(y, colors) {
-    for (let x = 0; x < lineSize; x++) {
+    for (let x = 0; x < colors.length; x++) {
       drawSquare(x, y, p.color(colors[x]));
     }
   }
 
   function drawLines(lines) {
-    for (let y = 0; y < nbLines; y++) {
+    for (let y = 0; y < lines.length; y++) {
       drawLine(y, lines[y]);
     }
   }
