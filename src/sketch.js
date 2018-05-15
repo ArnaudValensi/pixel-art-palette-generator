@@ -8,7 +8,7 @@ const sketch = (p5) => {
   const lineSize = 9 + 7;
   const nbLines = 8;
   const squareSize = 64;
-  const palette = new Palette();
+  let slider;
 
   function drawSquare(x, y, color) {
     p.fill(color);
@@ -29,17 +29,22 @@ const sketch = (p5) => {
 
   // runs once to set up the canvas
   p.setup = () => {
-    p.createCanvas(lineSize * squareSize, nbLines * squareSize);
+    p.createCanvas(lineSize * squareSize, nbLines * squareSize + 80);
     p.noStroke();
+
+    slider = p.createSlider(0, 359, 180, 1);
+    slider.position(10, nbLines * squareSize + 30);
+    slider.style('width', `${lineSize * squareSize - 20}px`);
   };
 
   // runs at every frame
   p.draw = () => {
     p.background(50);
 
-    const lines = palette.getLines();
+    const hueValue = slider.value();
 
-    console.log(JSON.stringify(lines, null, 2));
+    const palette = new Palette(hueValue);
+    const lines = palette.getLines();
 
     drawLines(lines);
   };
